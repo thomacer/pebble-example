@@ -4,7 +4,7 @@ var url = '';
 
 var download = function (url, callback) {
   var xhr = new XMLHttpRequest();
-    xhr.onload = function () {                                                                                                                                                   
+  xhr.onload = function () {                                                                                                                                                   
     callback(null, this.responseText);
   };
   xhr.open('GET', url);
@@ -16,21 +16,23 @@ var findClosest = function (data) {
   var closest = null;
   
   for (var k in data) {
-    if (data.hasOwnProperty(k)) {
+    if (data.hasOwnProperty(k) && data[k].type === 'VEVENT') {
       var ev = data[k];
+      console.log('Event : ' + JSON.stringify(ev));
       
-      if (now > ev.start.getDate()) {
+      if (now > ev.start) {
+        console.log('Fail for ' + ev.summary + ' because ' + ev.start);
         continue;
       }
       
       if (closest === null) {
         closest = ev;
-      } else if (ev.start.getDate() < closest.start.getDate()) {
+      } else if (ev.start < closest.start) {
         closest = ev;
       }
     }
   }
-
+  
   return closest;
 };
 
@@ -38,7 +40,9 @@ var format = function (event) {
   return {
     SUMMARY: event.summary,
     LOCATION: event.location,
-    DATE: event.start.getDate().toDateString(),
+    DATE: event.start.toDateString() + ' ' + 
+      event.start.getHours() + 'h' +
+      event.start.getMinutes(),
   };
 };
 
@@ -49,10 +53,9 @@ var sendICal = function () {
   download(url, function (err, data) {
     if (err) {
       return;
-    }
-    var ics = ical.parseICS(data);
-    
-    console.log('Found data');
+    }    
+    var ics = ical.parseICS(data);   
+    console.log('Found data ' + JSON.stringify(ics));
     var closest = findClosest (ics);
     
     Pebble.sendAppMessage(format(closest), function () {
