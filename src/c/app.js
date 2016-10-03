@@ -29,6 +29,7 @@ var format = function (event) {
   return {
     SUMMARY: event.summary,
     LOCATION: event.location,
+    DATE: event.start.getDate().toDateString(),
   };
 };
 

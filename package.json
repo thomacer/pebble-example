@@ -9,6 +9,7 @@
         "displayName": "ulb",
         "enableMultiJS": true,
         "messageKeys": {
+            "DATE": 4,
             "LOCATION": 3,
             "SUMMARY": 2,
             "message": 1,
