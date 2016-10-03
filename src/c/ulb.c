@@ -74,6 +74,8 @@ static void init(void) {
 	app_message_register_inbox_received(in_received_handler); 
 	app_message_register_inbox_dropped(in_dropped_handler); 
 	app_message_register_outbox_failed(out_failed_handler);
+  // app_message_register_outbox_sent(outbox_sent_callback);
+
 
   // Initialize AppMessage inbox and outbox buffers with a suitable size
   const int inbox_size = 1024;
