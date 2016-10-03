@@ -1,8 +1,6 @@
 {
     "author": "thomas.perale@openmailbox.org",
-    "dependencies": {
-        "ical": "0.5.0"
-    },
+    "dependencies": {},
     "keywords": [],
     "name": "ulb",
     "pebble": {

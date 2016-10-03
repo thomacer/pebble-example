@@ -1,6 +1,15 @@
-var ical = require('ical');
+var ical = require('./ical');
 
 var url = '';
+
+var download = function (url, callback) {
+  var xhr = new XMLHttpRequest();
+    xhr.onload = function () {                                                                                                                                                   
+    callback(null, this.responseText);
+  };
+  xhr.open('GET', url);
+  xhr.send();
+};
 
 var findClosest = function (data) {
   var now = new Date();
@@ -33,14 +42,19 @@ var format = function (event) {
   };
 };
 
+
+
 var sendICal = function () {
   console.log('Looking for ' + url);
-  ical.fromURL(url, {}, function (err, data) {
+  download(url, function (err, data) {
     if (err) {
-      console.log(err);
-    } 
+      return;
+    }
+    var ics = ical.parseICS(data);
+    
     console.log('Found data');
-    var closest = findClosest (data);
+    var closest = findClosest (ics);
+    
     Pebble.sendAppMessage(format(closest), function () {
       console.log('Sent ' + JSON.stringify(closest));
     }, function () {
